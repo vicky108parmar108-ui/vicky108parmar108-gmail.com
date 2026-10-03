@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lucky EGN.com</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f4f7fb;color:#172033}
+header{background:linear-gradient(135deg,#182848,#4b6cb7);color:#fff;padding:22px 16px;text-align:center;position:sticky;top:0;z-index:10}
+header h1{margin:0;font-size:27px}header p{margin:6px 0 0}
+.nav{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:15px}
+.nav button,.back{border:0;border-radius:10px;padding:10px 14px;cursor:pointer;font-weight:bold;background:#fff;color:#294d9b}
+.wrap{max-width:1050px;margin:auto;padding:18px}.search{width:100%;padding:14px;border:0;border-radius:12px;box-shadow:0 3px 14px #0001;margin-bottom:18px;font-size:16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}.card{background:#fff;padding:18px;border-radius:15px;box-shadow:0 3px 15px #0001;cursor:pointer;border-left:5px solid #3158a8}
+.card h2{margin:0 0 7px;color:#3158a8}.card p{margin:0;color:#606b7c;line-height:1.5}
+.lesson{background:#fff;padding:22px;border-radius:16px;box-shadow:0 3px 15px #0001;margin-top:15px;line-height:1.65}
+.lesson h2{color:#3158a8}.box{background:#eef4ff;padding:13px;border-radius:10px;margin:12px 0}.box h3{margin:0 0 5px;color:#263d72}
+.actions{display:flex;gap:9px;flex-wrap:wrap}.actions button{border:0;border-radius:10px;padding:11px 15px;cursor:pointer;font-weight:bold}.home{background:#3158a8;color:#fff}.back{background:#fff;border:1px solid #3158a8}.top{background:#182848;color:#fff}
+footer{text-align:center;padding:30px;color:#6b7280}
+</style></head>
+<body>
+<header>
+<h1>📚 Lucky EGN.com</h1><p>Complete English Grammar • Easy Urdu Meaning</p>
+<div class="nav">
+<button onclick="goHome()">🏠 Home</button>
+<button onclick="goNotes()">📚 All Notes</button>
+<button onclick="browserBack()">← Back</button>
+</div>
+</header>
+<div class="wrap">
+<div id="app"></div>
+</div>
+<footer>© Lucky EGN.com</footer>
+<script>
+const notes=[
+["Noun","A noun is a naming word.","Noun kisi person, place, thing, animal ya idea ka naam hota hai."],
+["Pronoun","A pronoun is used instead of a noun.","Pronoun Noun ki jagah use hota hai. Examples: I, you, he, she, we, they."],
+["Verb","A verb shows an action or state.","Verb kisi kaam/action ya state ko show karta hai. Examples: eat, run, write, is, are."],
+["Adjective","An adjective describes a noun.","Adjective Noun ya Pronoun ki quality, size, color ya quantity batata hai."],
+["Adverb","An adverb describes a verb, adjective, or adverb.","Adverb batata hai kaam kaise, kab, kahan ya kitna hua."],
+["Preposition","Shows relationship or position.","Preposition relation ya position batata hai. Examples: in, on, at, under, between."],
+["Conjunction","A joining word.","Conjunction words ya sentences ko join karta hai. Examples: and, but, or, because."],
+["Interjection","Expresses sudden feeling.","Interjection sudden feeling show karta hai. Examples: Wow!, Oh!, Hurrah!"],
+["Articles","A, An and The.","Articles Noun se pehle use hote hain: a book, an apple, the sun."],
+["Tenses","Tenses show time.","Present, Past aur Future. Har group mein Simple, Continuous, Perfect aur Perfect Continuous forms hoti hain."],
+["Active & Passive Voice","Shows who does or receives an action.","Active mein doer par focus; Passive mein action/object par focus hota hai."],
+["Direct & Indirect Speech","Reporting someone's words.","Direct mein exact words; Indirect mein speaker ki baat report ki jati hai."],
+["Sentence","Words forming a complete thought.","Sentence complete meaning deta hai. Examples: He is here. Are you ready?"],
+["Subject & Predicate","Two main sentence parts.","Subject batata hai kis ke baare mein baat hai; Predicate subject ke baare mein batata hai."],
+["Punctuation","Marks that make writing clear.","Full stop, comma, question mark, exclamation mark aur doosre punctuation marks."]
+];
+
+const app=document.getElementById("app");
+function goHome(){
+app.innerHTML=`<input class="search" id="search" placeholder="🔎 Search grammar topic...">
+<h2>🏠 Home</h2><p>Boss, apna grammar topic select karein.</p>
+<div class="grid">${notes.map((n,i)=>`<div class="card" onclick="openNote(${i})"><h2>${n[0]}</h2><p>${n[1]}</p></div>`).join("")}</div>`;
+document.getElementById("search").oninput=e=>renderSearch(e.target.value);
+window.scrollTo(0,0);
+}
+function goNotes(){goHome()}
+function renderSearch(q){const list=notes.filter(n=>(n.join(" ")).toLowerCase().includes(q.toLowerCase()));app.querySelector(".grid").innerHTML=list.map(n=>`<div class="card" onclick="openNote(${notes.indexOf(n)})"><h2>${n[0]}</h2><p>${n[1]}</p></div>`).join("")}
+function openNote(i){
+const n=notes[i];
+app.innerHTML=`<div class="actions"><button class="home" onclick="goHome()">🏠 Home</button><button class="back" onclick="goNotes()">📚 Notes</button><button class="back" onclick="browserBack()">← Previous Page</button></div>
+<div class="lesson"><h2>📖 ${n[0]}</h2>
+<div class="box"><h3>Definition</h3>${n[1]}</div>
+<div class="box"><h3>Easy Urdu Meaning</h3>${n[2]}</div>
+<div class="box"><h3>Examples</h3>Practice this topic with your own English sentences.</div>
+<div class="box"><h3>Quick Tip</h3>Topic ko examples ke saath practice karein.</div>
+</div>`;
+history.pushState({note:i},"","#"+encodeURIComponent(n[0].toLowerCase().replaceAll(" ","-")));
+window.scrollTo(0,0);
+}
+function browserBack(){if(history.length>1){history.back()}else{goHome()}}
+window.onpopstate=()=>goHome();
+goHome();
+</script></body></html>
